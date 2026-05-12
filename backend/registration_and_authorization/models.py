@@ -13,9 +13,9 @@ class UserManager(BaseUserManager):
 class Users(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     username = models.CharField(max_length=50, unique=True)
-    password = models.TextField()
     role = models.CharField(max_length=50)
     last_login = models.DateTimeField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'username'
     objects = UserManager()

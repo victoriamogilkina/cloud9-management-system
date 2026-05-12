@@ -34,6 +34,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "tailwind",
+    "theme",
     'clients',
     'registration_and_authorization',
     'django.contrib.admin',
@@ -43,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+TAILWIND_APP_NAME = "theme"
 
 AUTH_USER_MODEL = 'registration_and_authorization.Users'
 

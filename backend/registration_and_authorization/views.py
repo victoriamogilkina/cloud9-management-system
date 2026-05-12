@@ -8,7 +8,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect("dashboard")
+            return redirect("create-client")
     else:
         form = MyUserCreationForm()
 
@@ -19,13 +19,20 @@ def log_in(request):
         form = MyLoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            user.is_active = True
+
+            print("LOGGED IN USER:", user)
+            print("IS AUTHENTICATED:", request.user.is_authenticated)
+            print("REQUEST.USER:", request.user)
+
             login(request, user)
-            return redirect("dashboard")
+            return redirect("create-client")
     else:
         form = MyLoginForm()
 
     return render(request, "accounts/login.html", {"form": form})
 
 def log_out(request):
+    
     logout(request)
     return redirect("log-in")
