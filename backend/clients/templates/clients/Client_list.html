@@ -1,33 +1,98 @@
-{% extends 'accounts/layout.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Список клиентов{% endblock %}
 
 {% block body %}
-    {% for client in active_clients%}
-        <h1>{{client.full_name}}</h1><br>
-        <h2>{{ client.expires_at|date:"Y-m-d H:i:s"}}</h2>
-        <a href="{% url 'client-time-update' client.pk %}">Добавить время</a>
-        <form method="post" action="{% url 'client-delete' client.pk %}" 
-              style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger" 
-                    onclick="return confirm('Удалить клиента {{ client.full_name }}?')">
-                Удалить
-            </button>
-        </form>
-    {% endfor %}
-
-    {% for client in expired_clients%}
-        <h1>{{client.full_name}} просрочен</h1><br>
-        <h2>{{ client.expires_at|date:"Y-m-d H:i:s"}}</h2>
-        <a href="{% url 'client-time-update' client.pk %}">Добавить время</a>
-        <form method="post" action="{% url 'client-delete' client.pk %}" 
-              style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger" 
-                    onclick="return confirm('Удалить клиента {{ client.full_name }}?')">
-                Удалить
-            </button>
-        </form>
-    {% endfor %}
+<div class="fixed inset-0 grid grid-cols-[2fr_12fr] grid-rows-1">
+    <div class="p-2">
+        <div class="rounded-xl border-3 border-gray-300 bg-gray-100 h-full py-4 px-3 flex flex-col text-2xl justify-between">
+            <div class="flex flex-col gap-3 h-full">
+                <span class="text-4xl text-center text-shadow-lg text-shadow-gray-300 text-blue-400 font-bold">Cloud9</span>
+                {% comment %} !! <img src="{% static 'pic/logo.svg' %}"></img> {% endcomment %}
+                <a href="{% url 'dashboard' %}" class="rounded-md mx-5 py-1 px-4 text-center">Dashboard</a>
+                <span class="bg-gray-300 rounded-md mx-2 py-1 px-4 text-center">Clients</span>
+            </div>
+            <form method="post" action="{% url 'log-out' %}" style="display: inline;" class="">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-400 px-5 rounded-xl ml-11 py-1" 
+                        onclick="return confirm('Вы уверены что хотите выйти?')">
+                    Выйти
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 grid-rows-[1fr_2fr_16fr] gap-5"> 
+        <div class="flex flex-col pt-5 pl-5">
+            <span class="font-bold text-4xl">Clients</span>
+            <span class="text-xl text-gray-500">Manage your club clients</span>
+        </div>
+        <div class="px-6 pt-8 text-2xl flex justify-between">
+            <form method="get" action="{% url 'client-list' %}" class="flex-1">
+                    <div class="relative w-120">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Поиск по имени или PC..." 
+                            value="{{ query }}"
+                            class="w-120 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        >
+                        <button 
+                            type="submit" 
+                            class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 bg-blue-400 text-white rounded hover:bg-blue-500">
+                            Найти
+                        </button>
+                    </div>
+                </form>
+                {% if query %}
+                    <p class="text-gray-600 mt-2">По запросу: <strong>{{ query }}</strong> — найдено: {{ active_clients.count }} активных / {{expired_clients.count}} неактивных</p>
+                {% endif %}
+                <a href="{% url 'create-client' %}" class="self-center  px-4 py-1 bg-blue-400 text-white rounded hover:bg-blue-500">Записать клиента</a>
+        </div>
+        <div class="px-6 pb-40 grid grid-cols-2 gap-2">
+            <div class="rounded-xl border-3 border-gray-300 bg-gray-100 h-180 overflow-auto p-5 pl-8">
+                <span class="text-3xl font-bold">Active Clients</span>
+                <div class="grid grid-cols-[2fr_1fr_2fr] text-xl my-3">
+                    <span class="ml-5">Client</span>
+                    <span>PC</span>
+                    <span>Expires time</span>
+                </div>
+                <hr class="border-gray-300 my-3"></hr>
+                {% for client in active_clients %}
+                    <div class="grid grid-cols-[2fr_1fr_2fr] text-xl place-content-center">
+                        <span class="ml-5">{{client.full_name}} 
+                            <form method="post" action="{% url 'client-delete' client.pk %}" 
+                                style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-red-400 px-2 rounded-xl" 
+                                        onclick="return confirm('Удалить клиента {{ client.full_name }}?')">
+                                    Delete
+                                </button>
+                            </form></span>
+                        <span>PC-{{client.pc_number}}</span>
+                        <span class="flex gap-2">{{ client.expires_at|date:"Y-m-d H:i:s"}}
+                            <a href="{% url 'client-time-update' client.pk %}" class="bg-gray-300 rounded-xl">+Time</a>
+                        </span>
+                    </div>
+                    <hr class="border-gray-300 my-3"></hr>
+                {% endfor %}
+            </div>
+            <div class="rounded-xl border-3 border-gray-300 bg-gray-100 h-180 overflow-auto p-5 pl-8">
+                <span class="text-3xl font-bold">Expired Clients</span>
+                <div class="grid grid-cols-[2fr_1fr_2fr] text-xl my-3">
+                    <span class="ml-5">Client</span>
+                    <span>PC</span>
+                    <span>Expires time</span>
+                </div>
+                <hr class="border-gray-300 my-3"></hr>
+                {% for client in expired_clients %}
+                    <div class="grid grid-cols-[2fr_1fr_2fr] text-xl place-content-center">
+                        <span class="ml-5">{{client.full_name}}</span>
+                        <span>PC-{{client.pc_number}}</span>
+                        <span>{{ client.expires_at|date:"Y-m-d H:i:s"}}</span>
+                    </div>
+                    <hr class="border-gray-300 my-3"></hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

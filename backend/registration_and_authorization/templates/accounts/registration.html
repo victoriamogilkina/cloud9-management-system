@@ -1,10 +1,66 @@
-{% extends 'accounts/layout.html' %}
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
 
 {% block title %}Регистрация{% endblock %}
 
-{% block body %}
-<form method="post" novalidate>
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Зарегистрироваться</button>
-</form>
+{% block acc %}
+<div class="fixed inset-0 grid place-content-center">
+  <form method="post" class="text-2xl font-bold border-3 border-gray-300 rounded-xl bg-gray-50 grid grid-cols-2 grid-rows-[fr4_fr4_fr3] w-200 h-130 px-6 py-2 pb-4 gap-3"novalidate>
+    {% csrf_token %}
+    <div class="row-span-2 flex flex-col px-2 py-1 pb-2">
+      <div class='flex flex-col w-full mb-2'>
+        <span class="text-5xl mt-8 text-shadow-lg text-shadow-gray-300 text-blue-400 text-center gap-1">Cloud9</span>
+        <span class="font-light text-lg text-center">Система управления компьютерным клубом</span>
+      </div>
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+            {{ form.username.label_tag }}
+            {% render_field form.username class="border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Enter username" %}
+        </div>
+        <div class="flex flex-col gap-1">
+            {{ form.role.label_tag }}
+            {% render_field form.role class="border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Enter role admin/employee" %}
+        </div>
+      </div>
+    </div>
+    <div class="row-span-2 flex flex-col gap-3 pt-[15px]">
+      <div class="flex-flex-col gap-2">
+          {{ form.password1.label_tag }}
+          {% render_field form.password1 class="border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Enter password" %}
+      </div>
+      <ul class="font-light text-base">
+        <li>Your password can’t be too similar to your other personal information.</li>
+        <li>Your password must contain at least 8 characters.</li>
+        <li>Your password can’t be a commonly used password.</li>
+        <li>Your password can’t be entirely numeric.</li>
+      </ul>
+      <div class="flex flex-col gap-2">
+          {{ form.password2.label_tag }}
+          {% render_field form.password2 class="border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Confrim password" %}
+      </div>
+      {% if form.errors %}
+      <script>
+          const errors = [
+              {% for field in form %}
+                  {% if field.errors %}
+                      {% for error in field.errors %}
+                          "{{ field.label }}: {{ error|escapejs }}",
+                      {% endfor %}
+                  {% endif %}
+              {% endfor %}
+          ];
+          
+          if (errors.length > 0) {
+              alert('Ошибка:\n\n' + errors.filter(Boolean).join('\n'));
+          }
+      </script>
+      {% endif %}
+    </div>
+    <div class="col-span-2 row-start-3 flex flex-col items-center">
+      <button type="submit" class="bg-gray-400 w-100 h-12 rounded-lg py-1 text-3xl shadow-xl transition-transform duration-250 hover:bg-gray-500 hover:text-gray-50 hover:scale-105 hover:shadow-gray-400">REGISTRATION</button>
+      <a href="{% url 'log-in' %}" class="text-center font-light text-xl">Назад</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

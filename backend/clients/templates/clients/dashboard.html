@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Доска{% endblock %}
+
+{% block body %}
+<div class="fixed inset-0 grid grid-cols-[2fr_12fr] grid-rows-1">
+    <div class="p-2">
+        <div class="rounded-xl border-3 border-gray-300 bg-gray-100 h-full py-4 px-3 flex flex-col gap-3 text-2xl">
+            <span class="text-4xl text-center text-shadow-lg text-shadow-gray-300 text-blue-400 font-bold">Cloud9</span>
+            {% comment %} !! <img src="{% static 'pic/logo.svg' %}"></img> {% endcomment %}
+            <span class="bg-gray-300 rounded-md mx-2 py-1 px-4 text-center">Dashboard</span>
+            <a href="{% url 'client-list' %}" class="rounded-md mx-5 py-1 px-4 text-center">Clients</a> 
+        </div>
+    </div>
+    <div class="grid grid-cols-1 grid-rows-[1fr_3fr_16fr]"> 
+        <div class="flex flex-col pt-5 pl-5">
+            <span class="font-bold text-4xl">Dashboard</span>
+            <span class="text-xl text-gray-500">Overview of your club</span>
+        </div>
+        <div class="flex gap-8 p-5">
+            <div class="rounded-xl border-3 border-gray-300 bg-gray-100 w-75 flex flex-col gap-2 justify-center items-start pl-8">
+                <span class="text-2xl">Active Clients</span>
+                <span class="text-4xl font-bold">{{active_clients|length}}</span>
+            </div>
+            <div class="rounded-xl border-3 border-gray-300 bg-gray-100 w-75 flex flex-col gap-2 justify-center items-start pl-8">
+                <span class="text-2xl">Available PCs</span>
+                <span class="text-4xl font-bold">{{ my_pc }}</span>
+            </div>
+        </div>
+        <div class="px-6 pb-50">
+            <div class="rounded-xl border-3 border-gray-300 bg-gray-100 w-250 h-full p-5 pl-8">
+                <span class="text-3xl font-bold">Active Clients</span>
+                <div class="grid grid-cols-[2fr_1fr_2fr] text-xl my-3">
+                    <span class="ml-5">Client</span>
+                    <span>PC</span>
+                    <span>Expires time</span>
+                </div>
+                <hr class="border-gray-300 my-3"></hr>
+                {% for client in active_clients %}
+                    <div class="grid grid-cols-[2fr_1fr_2fr] text-xl place-content-center">
+                        <span class="ml-5">{{client.full_name}}</span>
+                        <span>PC-{{client.pc_number}}</span>
+                        <span>{{ client.expires_at|date:"Y-m-d H:i:s"}}</span>
+                    </div>
+                    <hr class="border-gray-300 my-3"></hr>
+                {% endfor %}
+        </div>
+        </div>
+    </div>
+{% endblock %}

@@ -11,7 +11,7 @@ class Clients(models.Model):
     pc_number = models.CharField(max_length=5, unique=True)
     status = models.CharField(max_length=50, default='active')
     create_at = models.DateTimeField(default=timezone.now())
-    expires_at = models.DateTimeField(default=timezone.now())
+    expires_at = models.DateTimeField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING)
 
     class Meta:

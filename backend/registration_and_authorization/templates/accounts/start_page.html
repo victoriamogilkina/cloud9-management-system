@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block title %}Начальная страница{% endblock %} 
+{% block acc %}
+<div class="fixed inset-0 grid place-content-center text-blue-400">
+  <div
+    class="w-70 h-50 rounded-2xl font-bold bg-gray-50 border-gray-300 border-3 flex flex-col justify-between py-5 px-3 items-center shadow-gray-500 shadow-lg"
+  >
+    <span class="text-4xl mt-8 text-shadow-lg text-shadow-gray-300">Cloud9</span>
+    <a href="{% url 'dashboard' %}" class="decoration-0 border-blue-400 border-2 rounded-xl shadow-xl px-2 py-1 text-2xl w-50 text-center transition-transform duration-250 hover:bg-blue-400 hover:text-gray-50 hover:scale-105 hover:shadow-blue-400">Начать</a>
+  </div>
+</div>
+{% endblock %}
