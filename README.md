@@ -74,7 +74,6 @@ Cloud9/
 └── Cloud9_Project_Tasks_Final.xlsx
 
 
-```bash
 backend/
 │
 ├── core/
