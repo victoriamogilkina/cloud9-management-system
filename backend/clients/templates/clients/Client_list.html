@@ -1,21 +1,21 @@
-{% extends 'accounts/layout.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Список клиентов{% endblock %}
 
 {% block body %}
-    {% for client in active_clients%}
-        <h1>{{client.full_name}}</h1><br>
-        <h2>{{ client.expires_at|date:"Y-m-d H:i:s"}}</h2>
-        <a href="{% url 'client-time-update' client.pk %}">Добавить время</a>
-        <form method="post" action="{% url 'client-delete' client.pk %}" 
-              style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger" 
-                    onclick="return confirm('Удалить клиента {{ client.full_name }}?')">
-                Удалить
-            </button>
-        </form>
-    {% endfor %}
+        {% for client in active_clients%}
+            <h1>{{client.full_name}}</h1><br>
+            <h2>{{ client.expires_at|date:"Y-m-d H:i:s"}}</h2>
+            <a href="{% url 'client-time-update' client.pk %}">Добавить время</a>
+            <form method="post" action="{% url 'client-delete' client.pk %}" 
+                  style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" 
+                        onclick="return confirm('Удалить клиента {{ client.full_name }}?')">
+                    Удалить
+                </button>
+            </form>
+        {% endfor %}
 
     {% for client in expired_clients%}
         <h1>{{client.full_name}} просрочен</h1><br>

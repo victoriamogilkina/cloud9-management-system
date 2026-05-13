@@ -26,7 +26,7 @@ def log_in(request):
             print("REQUEST.USER:", request.user)
 
             login(request, user)
-            return redirect("create-client")
+            return redirect("dashboard")
     else:
         form = MyLoginForm()
 
@@ -36,3 +36,6 @@ def log_out(request):
     
     logout(request)
     return redirect("log-in")
+
+def start(request):
+    return render(request, "accounts/start_page.html")
