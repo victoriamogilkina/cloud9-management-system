@@ -39,6 +39,23 @@
           {{ form.password2.label_tag }}
           {% render_field form.password2 class="border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Confrim password" %}
       </div>
+      {% if form.errors %}
+      <script>
+          const errors = [
+              {% for field in form %}
+                  {% if field.errors %}
+                      {% for error in field.errors %}
+                          "{{ field.label }}: {{ error|escapejs }}",
+                      {% endfor %}
+                  {% endif %}
+              {% endfor %}
+          ];
+          
+          if (errors.length > 0) {
+              alert('Ошибка:\n\n' + errors.filter(Boolean).join('\n'));
+          }
+      </script>
+      {% endif %}
     </div>
     <div class="col-span-2 row-start-3 flex flex-col items-center">
       <button type="submit" class="bg-gray-400 w-100 h-12 rounded-lg py-1 text-3xl shadow-xl transition-transform duration-250 hover:bg-gray-500 hover:text-gray-50 hover:scale-105 hover:shadow-gray-400">REGISTRATION</button>

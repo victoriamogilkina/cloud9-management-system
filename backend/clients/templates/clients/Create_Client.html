@@ -1,10 +1,28 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block title %}Создание клиента{% endblock %}
 
 {% block body %}
-<form method="post" novalidate>
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Создать</button>
-</form>
+<div class="fixed inset-0 grid place-content-center">
+  <form method="post" novalidate class="bg-gray-100 w-140 h-120 p-8 text-3xl border-3 rounded-xl border-gray-300 flex flex-col gap-3">
+    {% csrf_token %}
+    <div>
+      {{ form.full_name.label_tag }}
+      {% render_field form.full_name class="text-2xl border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Enter username" %}
+    </div>
+    <div>
+      {{ form.pc_number.label_tag }}
+      {% render_field form.pc_number class="text-2xl border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Enter username" %}
+    </div>
+    <div>
+      {{ form.expires_at.label_tag }}
+      {% render_field form.expires_at class="text-2xl border-3 border-gray-300 bg-gray-100 shadow-xl transition-transform focus:bg-gray-200 focus:scale-105 focus:shadow-gray-400 outline-0 rounded-xl px-4 py-2 mt-2 w-full " placeholder="Enter username" %}
+    </div>
+    <div class="flex flex-col gap-2 items-center mt-5">
+      <button type="submit" class="bg-gray-400 w-100 h-12 rounded-lg py-1 text-3xl shadow-xl transition-transform duration-250 hover:bg-gray-500 hover:text-gray-50 hover:scale-105 hover:shadow-gray-400">Создать</button>
+      <a href="{% url 'client-list' %}" class="text-center font-bold text-xl">Назад</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block body %}
+ <h1>Поиск постов</h1>
+    
+    <!-- Форма поиска -->
+    <form method="get" action="{% url 'search' %}">
+        <input 
+            type="text" 
+            name="q" 
+            placeholder="Введите поисковый запрос..." 
+            value="{{ query }}"
+            size="40"
+        >
+        <button type="submit">Найти</button>
+    </form>
+    
+    {% if query %}
+        <p>По запросу: <strong>{{ query }}</strong></p>
+    {% endif %}
+    
+    <!-- Результаты поиска -->
+    {% if results %}
+        <p>Найдено: {{ results.count }}</p>
+        
+        {% for post in results %}
+            <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                <h3>
+                    <a href="#">{{ post.title }}</a>
+                </h3>
+                <p><strong>Автор:</strong> {{ post.author }}</p>
+                <p>{{ post.body|truncatewords:30 }}</p>
+                <small>{{ post.pub_date }}</small>
+            </div>
+        {% endfor %}
+        
+    {% elif query %}
+        <!-- Если запрос был, но ничего не найдено -->
+        <p>Ничего не найдено по запросу "{{ query }}"</p>
+        
+    {% else %}
+        <!-- Если запроса вообще не было -->
+        <p>Введите запрос для поиска</p>
+    {% endif %}
+{% endblock %}

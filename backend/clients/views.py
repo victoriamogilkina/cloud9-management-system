@@ -4,19 +4,29 @@ from django.contrib.auth.decorators import login_required
 from .decorators import role_required
 from .forms import PostClient, AddTime
 from django.utils import timezone
+from django.db.models import Q
 
 
 # Create your views here.
 @login_required
 def clients_list(request):
-    aware_dt = timezone.now()
-    active_clients = Clients.objects.filter(expires_at__gt=aware_dt)
-    expired_clients = Clients.objects.filter(expires_at__lt=aware_dt)
-    return render(
-        request,
-        "clients/Client_list.html",
-        {"active_clients": active_clients, "expired_clients": expired_clients},
-    )
+    query = request.GET.get('q', '')
+    qs = Clients.objects.all()
+    if query:
+        qs = qs.filter(
+            Q(full_name__icontains=query) |
+            Q(pc_number__icontains=query)
+        )
+    now = timezone.now().date()
+    active_clients = qs.filter(expires_at__date__gte=now).order_by('-expires_at')
+    expired_clients = qs.filter(expires_at__date__lt=now).order_by('expires_at')
+    
+    context = {
+        'active_clients': active_clients,
+        'expired_clients': expired_clients,
+        'query': query,  
+    }
+    return render(request, 'clients/Client_list.html', context)
 
 
 @login_required
@@ -32,7 +42,6 @@ def dashboard(request):
         "clients/dashboard.html",
         {"active_clients": active_clients, "my_pc": my_pc},
     )
-
 
 @role_required("admin")
 def create_client(request):

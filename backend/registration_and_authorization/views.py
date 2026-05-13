@@ -21,10 +21,6 @@ def log_in(request):
             user = form.get_user()
             user.is_active = True
 
-            print("LOGGED IN USER:", user)
-            print("IS AUTHENTICATED:", request.user.is_authenticated)
-            print("REQUEST.USER:", request.user)
-
             login(request, user)
             return redirect("dashboard")
     else:
